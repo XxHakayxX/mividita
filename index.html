@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Reina Linda 👑</title>
+    <!-- Fuentes de Google para un toque elegante y romántico -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-light: #ffe6ea;
+            --pink-medium: #ffb6c1;
+            --pink-dark: #d81b60;
+            --text-main: #4a0e1c;
+            --white-glass: rgba(255, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Oculta el cursor por defecto para usar el corazón */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--pink-light) 0%, #ffc0cb 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Cursor de Corazón Personalizado */
+        .cursor-heart {
+            width: 20px;
+            height: 20px;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            transition: transform 0.1s;
+        }
+
+        /* Partículas flotantes de fondo */
+        #particles-js {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* --- SECCIÓN HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: var(--pink-dark);
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeInDown 1.5s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeInUp 1.5s forwards 1s;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2rem;
+            color: var(--pink-dark);
+            animation: bounce 2s infinite;
+            opacity: 0;
+            animation: bounce 2s infinite, fadeIn 1s forwards 2s;
+        }
+
+        /* --- SECCIÓN DE LA SORPRESA --- */
+        .section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .glass-panel {
+            background: var(--white-glass);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 40px rgba(216, 27, 96, 0.15);
+            text-align: center;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s ease-out;
+        }
+
+        .glass-panel.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .glass-panel h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--pink-dark);
+            margin-bottom: 20px;
+        }
+
+        .glass-panel p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .highlight-box {
+            background: rgba(216, 27, 96, 0.1);
+            border-left: 5px solid var(--pink-dark);
+            padding: 15px;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            margin: 20px 0;
+        }
+
+        /* --- GALERÍA / TARJETAS 3D --- */
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: white;
+            width: 300px;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 30px rgba(216, 27, 96, 0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--pink-medium), var(--pink-dark));
+        }
+
+        .card h3 {
+            color: var(--pink-dark);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        /* --- REPRODUCTOR DE MÚSICA FLOTANTE --- */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white-glass);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            border: 1px solid rgba(255,192,203,0.5);
+            transition: transform 0.3s;
+        }
+
+        .music-player:hover {
+            transform: scale(1.05);
+        }
+
+        .music-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--pink-dark);
+            margin-right: 10px;
+        }
+
+        audio {
+            height: 35px;
+        }
+
+        /* --- CARTA INTERACTIVA --- */
+        .letter-btn {
+            background: linear-gradient(45deg, var(--pink-dark), #ff4081);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(216, 27, 96, 0.3);
+            transition: all 0.3s;
+        }
+
+        .letter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 25px rgba(216, 27, 96, 0.5);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 50px;
+            border-radius: 20px;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="2" fill="%23ffe6ea"/></svg>');
+            border: 4px solid var(--pink-light);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--pink-dark);
+            font-weight: bold;
+        }
+
+        /* KEYFRAMES */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .music-player { bottom: 10px; right: 10px; padding: 10px; flex-direction: column; border-radius: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cursor de corazón -->
+    <div class="cursor-heart" id="cursor">💖</div>
+
+    <!-- Contenedor de partículas -->
+    <div id="particles-js"></div>
+
+    <!-- Inicio -->
+    <header class="hero">
+        <h1>Para Maryorit, Mi Reina Linda</h1>
+        <p>Una pequeña página hecha con todo mi corazón, para la mujer que cambió mi mundo por completo.</p>
+        <div class="scroll-indicator">⬇</div>
+    </header>
+
+    <!-- Sección de la Sorpresa -->
+    <section class="section" id="sorpresa">
+        <div class="glass-panel scroll-element">
+            <h2>El Mejor Detalle del Mundo 🚗💕</h2>
+            <p>Ayer me hiciste el chico más feliz de todo el mundo entero. No te imaginas lo que sentí.</p>
+            
+            <div class="highlight-box">
+                Llegar a casa súper cansado después de las clases de la universidad, entrar a mi cuarto y ver esa cajita de Hot Wheels sorpresa en mi cama... 
+            </div>
+
+            <p>Saber que planeaste todo esto a escondidas, desde hace tiempo con mucho cariño y esfuerzo me hace sentir querido como nunca antes en mi vida. Tu sola existencia me anima, me llena de vida y me motiva a ser mejor cada día.</p>
+        </div>
+    </section>
+
+    <!-- Sección de Detalles de Ella -->
+    <section class="section">
+        <div class="glass-panel scroll-element" style="background: transparent; border: none; box-shadow: none; padding: 0;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 40px;">Por qué estoy obsesionado contigo?</h2>
+            
+            <div class="cards-container">
+                <!-- Tarjeta 1 -->
+                <div class="card">
+                    <div class="card-icon">👩‍⚖️</div>
+                    <h3>Mi Abogada Favorita</h3>
+                    <p>Admiro tu inteligencia y tu pasión. Eres la mejor abogada especializada, y verte brillar en lo que haces me llena de un orgullo infinito.</p>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="card">
+                    <div class="card-icon">🌸</div>
+                    <h3>Tu Estilo Único</h3>
+                    <p>Me fascina cómo todo lo llevas te queda maravilloso. Amo ver tu carita, me encantan todos tus estilos, y como quieres vestirme mua mua</p>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="card">
+                    <div class="card-icon">❤️‍🔥</div>
+                    <h3>Tu preciosura</h3>
+                    <p>Eres mi debilidad. Eres la mujer más hermosa que mis ojos han visto, y no tienes idea de cuanto me encanta verte desnuda, me vuelve loco tu precioso y sexy cuerpo eres mi diosa</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Carta Final -->
+    <section class="section" style="text-align: center; margin-bottom: 100px;">
+        <div class="glass-panel scroll-element">
+            <h2>Un Mensaje Para Ti</h2>
+            <p>No me alcanzan las páginas web, ni las palabras, ni las canciones para expresar lo inmensamente bella que eres para mí y el valor incalculable que tienes en mi vida.</p>
+            <button class="letter-btn" onclick="abrirCarta()">Abrir Carta Especial 💌</button>
+        </div>
+    </section>
+
+    <!-- Modal de la Carta -->
+    <div class="modal" id="modalCarta">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarCarta()">✖</span>
+            <h2 style="font-family: 'Dancing Script', cursive; color: #d81b60; font-size: 2.5rem;">Te Amo Locamente</h2>
+            <p style="font-size: 1.2rem; line-height: 1.8; margin-top: 20px; color: #5c162e;">
+                "Desde aquel hermoso 20 de agosto, supe que mi vida iba a ser mejor porque tú estabas en ella. 
+                Gracias por cuidarme, por pensar en mí, por las sorpresas y por amarme. Prometo hacerte tan feliz como tú me hiciste feliz ayer <br><br>
+                Eres mi presente y mi futuro, mi reina linda."
+            </p>
+        </div>
+    </div>
+
+    <!-- Reproductor de música (flotante) -->
+    <div class="music-player">
+        <span class="music-text">🎵💖Dance with me</span>
+        <!-- Aquí va tu canción god.mp3 -->
+        <audio controls loop>
+            <source src="cancion.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- SCRIPT PARA INTERACTIVIDAD -->
+    <script>
+        // 1. Lógica del cursor de corazón personalizado
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        
+        // Efecto click en el cursor
+        document.addEventListener('mousedown', () => cursor.style.transform = 'translate(-50%, -50%) scale(0.7)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
+
+        // 2. Animaciones al hacer scroll (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const scrollElements = document.querySelectorAll('.scroll-element');
+        scrollElements.forEach((el) => observer.observe(el));
+
+        // 3. Partículas de corazones cayendo (ligero y fluido)
+        function crearParticula() {
+            const particula = document.createElement('div');
+            const esCorazon = Math.random() > 0.5;
+            particula.innerHTML = esCorazon ? '💖' : '✨';
+            
+            particula.style.position = 'absolute';
+            particula.style.left = Math.random() * 100 + 'vw';
+            particula.style.top = '-20px';
+            particula.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            particula.style.opacity = Math.random() * 0.5 + 0.3;
+            particula.style.transition = 'transform 5s linear, top 5s linear';
+            particula.style.zIndex = '-1';
+            
+            document.getElementById('particles-js').appendChild(particula);
+
+            // Animar caída
+            setTimeout(() => {
+                particula.style.top = '100vh';
+                particula.style.transform = `rotate(${Math.random() * 360}deg)`;
+            }, 50);
+
+            // Eliminar del DOM al terminar
+            setTimeout(() => {
+                particula.remove();
+            }, 5000);
+        }
+
+        setInterval(crearParticula, 300);
+
+        // 4. Lógica de la Carta Modal
+        const modal = document.getElementById('modalCarta');
+        
+        function abrirCarta() {
+            modal.style.display = 'flex';
+        }
+
+        function cerrarCarta() {
+            modal.style.display = 'none';
+        }
+
+        // Cerrar al hacer click fuera de la carta
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
